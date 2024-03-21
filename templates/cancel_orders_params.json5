@@ -1,0 +1,14 @@
+// https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_cancelorders
+//  
+// pyexch --method post --url https://api.coinbase.com/api/v3/brokerage/orders/batch_cancel
+//
+//   Either --auth coinbase.oauth2 or --auth coinbase.v3_api will work
+
+{
+  // List of order GUIDs from /api/v3/brokerage/orders/historical/batch
+  "order_ids": [
+    "abcdef01-2345-6789-abcd-ef0123456789"
+  ],
+}
+
+

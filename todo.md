@@ -1,13 +1,20 @@
 # Todo List
 
 - [x] Publish to github
+- [x] Add requirements.txt
+- [x] [Publish on PyPi][c]
+- [x] Use [JSON5][b] for `load` and `loads` operations
+- [x] Add [JSON templates][g]
+- [x] Add [Trezor templates][f]
+- [x] Add [annotated GnuPG / Trezor / JSON files as docs][e]
+- [x] Add PyPi banners
+- [x] Add Keystore.sort() call to beutify JSON ordering
+- [x] Add PUT and DELETE methods for Coinbase (untested)
+- [x] Mask input on private data so it's is muted on screen
+- [ ] Add [AES encryption][h], or port samples to [CryptoDomeX][i]
 - [ ] Add python `unittest`
 - [ ] Add python static analysis tool
-- [ ] Add requirements.txt
-- [ ] Add PyPi and Travis banners
-- [ ] [Publish on PyPi][c]
-- [ ] Use [OrderedDict][a] on Keystore.save() to beutify JSON ordering
-- [ ] Use [JSON5][b] for `load` and `loads` operations
+- [ ] Add Travis with banners
 - [ ] Fix ArgParse "NOTE" and `mutually_exlusive_group`
 - [ ] Determine why the [Revoke URI][d] isn't working.
 - [ ] Determine why `CbV2Auth` isn't working on authorized URLs.
@@ -18,11 +25,11 @@
 [b]: https://github.com/Kijewski/pyjson5 (JSON5)
 [c]: https://packaging.python.org/en/latest/tutorials/packaging-projects/ (PyPi)
 [d]: https://forums.coinbasecloud.dev/t/did-oauth2-revoke-uri-stop-doing-work/7394 (Revoke URI)
-[e]: 
-[f]: 
-[g]: 
-[h]: 
-[i]: 
+[e]: templates
+[f]: templates/trezor_ks.json5
+[g]: templates/json_ks.json5
+[h]: https://stackoverflow.com/a/21928790/4634229
+[i]: https://stackoverflow.com/a/48175912/4634229
 [j]: 
 [k]: 
 [l]: 

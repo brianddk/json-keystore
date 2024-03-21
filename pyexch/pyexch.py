@@ -1,14 +1,16 @@
 if __package__:
-    from .exchange import create    
+    from .exchange import Exchange    
     from .keystore import Keystore
 
 else:
-    from exchange import create    
+    from exchange import Exchange    
     from keystore import Keystore
 
 from argparse import ArgumentParser
-from json import dumps, load
+from pyjson5 import load
+from json import dumps
 from sys import argv, stderr
+from os.path import exists
 
 def main():
     if "__main__" in argv[0]: argv[0] = __file__
@@ -30,30 +32,42 @@ def main():
         # parser_url.add_argument('--url', metavar='https://...', required=True, help='rest http url to perform actions upon')
         # parser_url.add_argument('--method', metavar='< get, post >', default='get', help='rest http method (default:get, post)')
 
-    parser = ArgumentParser(description='Python Exchange CLI (pyexch)', epilog='NOTE: Must name either "--call" or "--url", but not both')
+    epilog = 'NOTE: Must name either "--call" or "--url", but not both, and "keystore.json" is assumed if "--keystore" is not named'
+    parser = ArgumentParser(description='Python Exchange CLI (pyexch)', epilog=epilog)
     parser.add_argument('--method', metavar='<get,post,>', default='get', help='rest http method (get<default>,post,put,delete)')
     parser.add_argument('--url', metavar='https://...', help='rest http url to perform actions upon')
-    parser.add_argument('--params', metavar='params.json', help='json / json5 filename holding rest parameters / data')
+    parser.add_argument('--params', metavar='params.json', help='json(5) filename holding rest parameters / data')
     parser.add_argument('--call', metavar='get_accounts', help='call method in the default client')
-    parser.add_argument('--keystore', metavar='ks.json', required=True, help='json / json5 filename where secrets are stored (backup!)')
+    parser.add_argument('--keystore', metavar='ks.json', default='keystore.json', help='json(5) filename where secrets are stored (backup!)')
     parser.add_argument('--auth', metavar='exch.auth', help='the auth method to use from keystore.')
     
     args = parser.parse_args()
     
+    if not exists(args.keystore):
+        parser.print_help()
+        print(f'\nKeystore file "{args.keystore}" not found')
+        exit(1)
+    
     if args.url and args.call:
         parser.print_help()
-        exit(1)
+        exit(2)
         
     if not args.url and not args.call:
         parser.print_help()
-        exit(2)
+        exit(3)
     
     params = None
     if args.params:
         with open(args.params, 'r') as pj:
             params = load(pj)
+
+    internals = [
+        'my_ipv4',
+        'my_ipv6',
+        'new_uuid'
+    ]
                 
-    ex = create(args.keystore, args.auth)
+    ex = Exchange.create(args.keystore, args.auth)
     
     if args.call:
         resp = ex._response = None
@@ -63,7 +77,13 @@ def main():
             ex.keystore.save()
             
         elif args.call == "print_keystore":
-            ex.keystore.print()
+            ex.keystore.print(args.params)
+        elif args.call in ['sort_keystore', 'sort_keyfile']:
+            method = getattr(ex.keystore, args.call)
+            method(args.params)
+        elif args.call in internals:
+            method = getattr(ex, args.call)
+            print(method())
         else:
             # todo: clean this up, maybe mirror this guy as "ex.default_client" or something
             auth = ex.keystore.get('default')
@@ -71,7 +91,10 @@ def main():
             elif auth == 'coinbase.v2_api': client = ex.v2_client
             elif auth == 'coinbase.v3_api': client = ex.v3_client
             method = getattr(client, args.call)
-            resp = method(**params)
+            if params:
+                resp = method(**params)
+            else:
+                resp = method()
         
     if args.url:
         method = getattr(ex, args.method)
