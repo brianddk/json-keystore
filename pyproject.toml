@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["license"]
+name = "pyexch"
+version = "0.0.3"
+description = "Python CLI Exchange Rest Client"
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.8.2"
+keywords = ["coinbase", "rest", "exchange"]
+dependencies = [
+    "coinbase >=2.1.0",
+    "coinbase-advanced-py >=1.2.0",
+    "trezor >=0.13.8",
+    "pyjson5 >=1.6.6",
+]
+authors = [{name = "brianddk", email = "brianddk@users.noreply.github.com"}]
+maintainers = [{name = "brianddk", email = "brianddk@users.noreply.github.com"}]
+classifiers = [
+  # How mature is this project? Common values are
+  #   3 - Alpha
+  #   4 - Beta
+  #   5 - Production/Stable
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Libraries",
+
+  # Pick your license as you wish (see also "license" above)
+  "License :: OSI Approved :: Apache Software License",
+
+  # Specify the Python versions you support here.
+  "Programming Language :: Python :: 3",
+]
+
+[project.optional-dependencies]
+dev = [
+    # Development dependencies here
+    "build >=1.1.1",
+    "twine >=5.0.0",
+    "black >=24.3.0",
+    "flake8 >=7.0.0",
+    "isort >=5.13.2",
+]
+
+[project.scripts]
+pyexch = "pyexch.pyexch:main"
+
+[project.urls]
+Homepage = "https://github.com/brianddk/pyexch"
+Repository = "https://github.com/brianddk/pyexch.git"
+Issues = "https://github.com/brianddk/pyexch/issues"
+Discussions = "https://github.com/brianddk/pyexch/discussions"
+Donations = "https://tippin.me/@dkbriand"
+
+[tool.setuptools.packages.find]
+where = ["pyexch"]
+
+[tool.black]
+line-length = 200
+target-version = ["py38"]

@@ -1,5 +1,12 @@
 # Personal files
 scratch.md
+# sanitize
+coinbase-python/
+bkup/
+data/
+data2/
+doc/
+posts/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
